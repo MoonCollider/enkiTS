@@ -18,8 +18,11 @@
 
 #pragma once
 
+#include <atomic>
+#include <thread>
+#include <condition_variable>
 #include <stdint.h>
-#include "Threads.h"
+#include <functional>
 
 namespace enki
 {
@@ -59,13 +62,31 @@ namespace enki
 		// Size of set - usually the number of data items to be processed, see ExecuteRange. Defaults to 1
 		uint32_t                m_SetSize;
 
-		bool                    GetIsComplete()
+		bool                    GetIsComplete() const
 		{
-			return 0 == m_CompletionCount;
+			return 0 == m_CompletionCount.load( std::memory_order_relaxed );
 		}
 	private:
 		friend class           TaskScheduler;
-		volatile int32_t        m_CompletionCount;
+		std::atomic<int32_t>   m_CompletionCount;
+	};
+
+	// A utility task set for creating tasks based on std::func.
+	typedef std::function<void (TaskSetPartition range, uint32_t threadnum  )> TaskSetFunction;
+	class TaskSet : public ITaskSet
+	{
+	public:
+		TaskSet() = default;
+		TaskSet( TaskSetFunction func_ ) : m_Function( func_ ) {}
+		TaskSet( uint32_t setSize_, TaskSetFunction func_ ) : ITaskSet( setSize_ ), m_Function( func_ ) {}
+
+
+		virtual void            ExecuteRange( TaskSetPartition range, uint32_t threadnum  )
+		{
+			m_Function( range, threadnum );
+		}
+
+		TaskSetFunction m_Function;
 	};
 
 
@@ -112,7 +133,7 @@ namespace enki
 		uint32_t        GetNumTaskThreads() const;
 
 	private:
-		static THREADFUNC_DECL  TaskingThreadFunction( void* pArgs );
+		static void  TaskingThreadFunction( const ThreadArgs& args_ );
 		bool             TryRunTask( uint32_t threadNum );
 		void             StartThreads();
 		void             StopThreads( bool bWait_ );
@@ -121,12 +142,13 @@ namespace enki
 
 		uint32_t                                                 m_NumThreads;
 		ThreadArgs*                                              m_pThreadNumStore;
-		threadid_t*                                              m_pThreadIDs;
-		volatile bool                                            m_bRunning;
-		volatile int32_t                                         m_NumThreadsRunning;
-		volatile int32_t                                         m_NumThreadsActive;
+		std::thread**											 m_pThreads;
+		std::atomic<int32_t>                                     m_bRunning;
+		std::atomic<int32_t>                                     m_NumThreadsRunning;
+		std::atomic<int32_t>                                     m_NumThreadsActive;
 		uint32_t                                                 m_NumPartitions;
-		eventid_t                                                m_NewTaskEvent;
+		std::condition_variable                                  m_NewTaskEvent;
+		std::mutex												 m_NewTaskEventMutex;
 		bool                                                     m_bHaveThreads;
 
 		TaskScheduler( const TaskScheduler& nocopy );
