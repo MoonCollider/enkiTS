@@ -94,7 +94,7 @@ namespace enki
 	{
 	public:
 		TaskScheduler();
-		~TaskScheduler();
+		virtual ~TaskScheduler();
 
 		// Call either Initialize() or Initialize( numThreads_ ) before adding tasks.
 
