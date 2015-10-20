@@ -38,6 +38,8 @@ static const uint32_t SPIN_COUNT = 100;
 #if _MSC_VER <= 1800
 #define thread_local __declspec(thread)
 #endif
+#elif defined(__APPLE__)
+#define thread_local __thread
 #endif
 
 // each software thread gets it's own copy of gtl_threadNum, so this is safe to use as a static variable
