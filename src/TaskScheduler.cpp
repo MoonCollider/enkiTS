@@ -27,6 +27,7 @@
 #include "TaskScheduler.h"
 #include "LockLessMultiReadPipe.h"
 
+#include <thread>
 
 using namespace enki;
 

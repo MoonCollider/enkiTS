@@ -19,10 +19,14 @@
 #pragma once
 
 #include <atomic>
-#include <thread>
 #include <condition_variable>
 #include <stdint.h>
 #include <functional>
+
+namespace std
+{
+	class thread;
+};
 
 namespace enki
 {
