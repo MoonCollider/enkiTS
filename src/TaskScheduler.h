@@ -23,10 +23,16 @@
 #include <stdint.h>
 #include <functional>
 
+#ifndef __APPLE__
 namespace std
 {
 	class thread;
-};
+}
+#else
+_LIBCPP_BEGIN_NAMESPACE_STD
+	class _LIBCPP_TYPE_VIS thread;
+_LIBCPP_END_NAMESPACE_STD
+#endif
 
 namespace enki
 {
