@@ -19,6 +19,8 @@
 // Ensure we are compiling STL types consistently across DLL boundaries.
 #undef _HAS_ITERATOR_DEBUGGING
 #define _HAS_ITERATOR_DEBUGGING 0
+#undef _ITERATOR_DEBUG_LEVEL
+#define _ITERATOR_DEBUG_LEVEL 0
 #undef _SECURE_SCL
 #define _SECURE_SCL 0
 #undef _SECURE_SCL_THROWS
