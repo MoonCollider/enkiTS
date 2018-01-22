@@ -23,7 +23,8 @@
 #include <stdint.h>
 #include <functional>
 
-#ifndef __APPLE__
+#if defined(__linux__) 
+#elif !defined __APPLE__
 namespace std
 {
 	class thread;
