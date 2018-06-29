@@ -24,6 +24,7 @@
 #include <functional>
 
 #if defined(__linux__) 
+#include <thread>
 #elif !defined __APPLE__
 namespace std
 {
