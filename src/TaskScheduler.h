@@ -26,10 +26,7 @@
 #if defined(__linux__) 
 #include <thread>
 #elif !defined __APPLE__
-namespace std
-{
-	class thread;
-}
+#include <thread>
 #else
 _LIBCPP_BEGIN_NAMESPACE_STD
 	class _LIBCPP_TYPE_VIS thread;
@@ -63,6 +60,9 @@ namespace enki
 			: m_SetSize( setSize_ )
 			, m_CompletionCount(0)
 		{}
+
+		virtual ~ITaskSet() {}
+
 		// Execute range should be overloaded to process tasks. It will be called with a
 		// range_ where range.start >= 0; range.start < range.end; and range.end < m_SetSize;
 		// The range values should be mapped so that linearly processing them in order is cache friendly
