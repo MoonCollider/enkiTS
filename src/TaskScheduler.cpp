@@ -16,16 +16,6 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
-#ifndef NO_STL_TYPE_CONSISTENCY
-// Ensure we are compiling STL types consistently across DLL boundaries.
-#undef _HAS_ITERATOR_DEBUGGING
-#define _HAS_ITERATOR_DEBUGGING 0
-#undef _SECURE_SCL
-#define _SECURE_SCL 0
-#undef _SECURE_SCL_THROWS
-#define _SECURE_SCL_THROWS 0
-#endif
-
 #include "TaskScheduler.h"
 #include "LockLessMultiReadPipe.h"
 
