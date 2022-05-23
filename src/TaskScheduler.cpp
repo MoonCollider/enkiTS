@@ -16,6 +16,12 @@
 //    misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 
+#include "KytDefinitions.h"
+
+KYT_WARNINGS_PUSH;
+KYT_WARNINGS_DISABLE(KYT_WARNING_COPY_CONSTRUCTOR_IMPLICITLY_DELETED);
+KYT_WARNINGS_DISABLE(KYT_WARNING_ASSIGNMENT_OPERATOR_IMPLICITLY_DELETED);
+
 #include "TaskScheduler.h"
 #include "LockLessMultiReadPipe.h"
 
@@ -326,3 +332,5 @@ void   TaskScheduler::Initialize()
 {
 	Initialize( std::thread::hardware_concurrency() );
 }
+
+KYT_WARNINGS_POP;
